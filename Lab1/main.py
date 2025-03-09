@@ -3,50 +3,68 @@ from naive import Naive
 from minHash import MinHash
 import random
 import time
-
-n_samples = 500
-b = 5
-r = 4
-# b_list = range(5, 35, 5)
-# r_list = range(5, 10)
+# --------------- 参数设置 --------------- #
+n_samples = 500 # 采样数
+b = 5           # MinHash 方法的 band 数量
+r = 4           # MinHash 方法的 row 数量
+# 记录最优 band 和 row 的参数
 best = {"b": None, "r": None, "result": None, "value": 100000}
-c = 0.8
-FILE_PATH = './data/E1_AOL-out.txt'
+c = 0.8         # Naive 方法的阈值
+FILE_PATH = './data/E1_AOL-out.txt' # 数据集路径
 
-
+# --------------- 数据加载 --------------- #
 def data(file_path):
+    # 打印数据加载信息
     print('Data Loading...')
+    # 设置时间起点
     time_start = time.time()
+    # 调用 DataLoader 类的 load 方法加载数据
     corpus = DataLoader(file_path).load()
+    # 设置时间终点
     time_end = time.time()
+    # 打印数据加载信息
     print('Data Loaded!')
+    # 打印数据集大小和加载时间
     print(f'Number of Set: {len(corpus)}')
     print(f'Time: {time_end - time_start}s')
+    # 返回列表 corpus，每个元素是一个集合
     return corpus
 
-
+# --------------- 采样 --------------- #
 def sample(corpus, n_samples):
+    # 打印采样信息
     print('Random Sampling...')
+    # 设置时间起点
     time_start = time.time()
+    # 使用 random.sample 方法从 corpus 中随机采样 n_samples 个样本
     samples = random.sample(corpus, n_samples)
+    # 设置时间终点
     time_end = time.time()
+    # 打印采样信息
     print(f'Number of Samples: {n_samples}')
     print('Sampling Done!')
     print(f'Time: {time_end - time_start}s')
+    # 返回列表 samples，每个元素是一个集合
     return samples
 
-
+# --------------- navie 方法 --------------- #
 def naiveMethod(samples, c):
+    # 打印 Naive 方法信息
     print('Naive Method Running...')
+    # 设置时间起点
     time_start = time.time()
+    # 调用 Naive 类的 run 方法
     naive = Naive()
     naive_result = naive.run(samples, c)
+    # 设置时间终点
     time_end = time.time()
+    # 打印 Naive 方法信息
     print(f'Naive Method Result: {len(naive_result)}')
     print(f'Time: {time_end - time_start}s')
+    # 返回相似集合对的数量
     return len(naive_result)
 
-
+# --------------- 数据预处理 --------------- #
 def preProcess(corpus):
     print('Preprocess...')
     time_start = time.time()
@@ -96,37 +114,34 @@ def preProcess(corpus):
     print(f'Time: {time_end - time_start}s')
     return data, len(values)
 
-
+# --------------- MinHash 方法 --------------- #
 def minHashMethod(samples, n, b, r, naive_result):
+    # 打印 MinHash 方法信息
     print('MinHash Method Running...')
+    # 设置时间起点
     time_start = time.time()
+    # 调用 MinHash 类的 run 方法
     minHash = MinHash(b, r)
     minHash_result = minHash.run(samples, n)
+    # 设置时间终点
     time_end = time.time()
-    # if abs(minHash_result - naive_result) < best["value"]:
-    #     best["value"] = abs(minHash_result - naive_result)
-    #     best["result"] = minHash_result
-    #     best["b"] = b
-    #     best["r"] = r
+    # 打印 Min
     print(f'b = {b} r = {r}')
     print(f'MinHash Method Result: {minHash_result}')
     print(f'Time: {time_end - time_start}s')
 
-
+# --------------- 参数设置 --------------- #
 def main():
+    # 加载数据
     corpus = data(FILE_PATH)
+    # 采样
     samples = sample(corpus, n_samples)
-
+    # Naive 方法
     naive_result = naiveMethod(samples, c)
-    # naive_result = []
+    # 数据预处理
     processed, n_elements = preProcess(samples)
-    # for b in b_list:
-    #     for r in r_list:
-    #         minHashMethod(processed, n_elements, b, r, naive_result)
-
+    # MinHash 方法
     minHashMethod(processed, n_elements, b, r, naive_result)
-    # print(best)
-
 
 if __name__ == '__main__':
     main()
