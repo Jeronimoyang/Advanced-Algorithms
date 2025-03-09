@@ -135,14 +135,19 @@ def minHashMethod(samples, n, b, r, naive_result):
 # --------------- 参数设置 --------------- #
 def main():
     # 加载数据
+    print('............................................................')
     corpus = data(FILE_PATH)
     # 采样
+    print('............................................................')
     samples = sample(corpus, n_samples)
     # Naive 方法
+    print('............................................................')
     naive_result = naiveMethod(samples, c)
     # 数据预处理
+    print('............................................................')
     processed, n_elements = preProcess(samples)
     # MinHash 方法
+    print('............................................................')
     minHashMethod(processed, n_elements, b, r, naive_result)
 
 if __name__ == '__main__':

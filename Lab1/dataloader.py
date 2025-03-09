@@ -1,6 +1,6 @@
 # 加载数据集
 class DataLoader:
-    # 初始化数据
+    # --------------- 初始化数据 --------------- #
     def __init__(self, file_path):
         # 定义字典，同于存储每个key对应的集合
         self.dict = dict()
@@ -18,7 +18,7 @@ class DataLoader:
         self.corpus = []
         for value in self.dict.values():
             self.corpus.append(list(value))
-    # 加载数据
+    # --------------- 加载数据 --------------- #
     def load(self):
         # 返回corpus，即所有集合的列表
         return self.corpus
