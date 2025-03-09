@@ -4,12 +4,12 @@ import hashlib
 # 实现 MinHash 和局部敏感哈希（LSH）算法
 # 估计集合之间的相似度
 class MinHash:
-    # 初始化 MinHash 类
+    # --------------- 初始化 MinHash 类 --------------- #
     def __init__(self, b, r):
         self.b = b
         self.r = r
 
-    # 静态方法，不依赖于类的实例 self
+    # --------------- 静态方法，不依赖于类的实例 self --------------- #
     @staticmethod
     # 对数据应用单一哈希函数进行处理，用来生成单一的 MinHash 值
     def singleHash(data, n):
@@ -32,7 +32,7 @@ class MinHash:
         # 返回 MinHash 值
         return result
 
-    # 计算 sigMatrix
+    # --------------- 计算 sigMatrix --------------- #
     def sigMatrix(self, data, n_elements, n_hash_funcs):
         # 初始化结果列表
         result = []
@@ -76,7 +76,7 @@ class MinHash:
 
         return hashBuckets
 
-    # 计算 MinHash + LSH，相似集合对的数量
+    # --------------- 计算 MinHash + LSH，相似集合对的数量 --------------- #
     def run(self, data, n):
         # 调用 minHash 方法，计算 MinHash 值，并进行局部敏感哈希处理
         hashBucket = self.minHash(data, n)
