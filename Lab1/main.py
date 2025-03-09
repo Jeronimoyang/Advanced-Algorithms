@@ -1,6 +1,3 @@
-import sys
-sys.path.insert(0,r'E:\\Git\\Advanced-Algorithms\\Lab1')
-
 from dataloader import DataLoader
 from naive import Naive
 from minHash import MinHash
