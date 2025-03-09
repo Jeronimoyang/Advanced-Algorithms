@@ -1,8 +1,13 @@
+import sys
+sys.path.insert(0,r'E:\\Git\\Advanced-Algorithms\\Lab1')
+
 from dataloader import DataLoader
 from naive import Naive
 from minHash import MinHash
 import random
 import time
+
+
 # --------------- 参数设置 --------------- #
 n_samples = 500 # 采样数
 b = 5           # MinHash 方法的 band 数量

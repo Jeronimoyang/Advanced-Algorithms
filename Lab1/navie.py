@@ -3,6 +3,7 @@ class Naive:
     # 初始化方法，不做任何事情
     def __init__(self):
         pass
+    
     # 静态方法，不依赖于类的实例 self
     @staticmethod
     # 计算两个列表之间的交集大小，即相同元素的个数
@@ -13,6 +14,7 @@ class Naive:
                 if element1 == element2:
                     sum += 1
         return sum
+    
     # 找到 corpus 中相似度大于 c 的集合对
     def run(self, corpus, c: float):
         # 创建一个空集合
