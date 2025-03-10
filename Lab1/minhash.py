@@ -9,13 +9,13 @@ class MinHash:
     # --------------- 静态方法，不依赖于类的实例 self --------------- #
     @staticmethod
     # 计算相似集合对
-    def minhash_work(n_element,sample,c):
+    def minhash_work(n_element,sample,c,n_samples,n_hash_funcs):
         # 创建一个空列表，用于存储相似集合对
         R=set()
         # 创建长度为500*500的列表，用于存储相似集合对的数量
-        ans=[0 for i in range(500*500)]
+        ans=[0 for i in range(n_samples*n_samples)]
         # 采用多次哈希 50次
-        for _ in range(50):
+        for _ in range(n_hash_funcs):
             # 生成长度为 n_element 的索引列表
             per=[i for i in range(n_element)]
             # 对索引列表进行随机排列
@@ -53,7 +53,7 @@ class MinHash:
             # 遍历所有集合
             for j in range(i+1,len(sample)):
                 # 如果两个集合的相似度大于阈值
-                if(ans[(i-1)*len(sample)+j]>=c*50):
+                if(ans[(i-1)*len(sample)+j]>=c*n_hash_funcs):
                     # 记录相似集合对(i,j)
                     R.add((i,j))
         # 返回相似集合对

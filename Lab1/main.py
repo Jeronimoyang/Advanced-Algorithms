@@ -3,10 +3,6 @@ from naive import Naive
 from minhash import MinHash
 import random
 import time
-# --------------- 参数设置 --------------- #
-n_samples=500   # 采样数量
-c=0.9           # Naive 方法的阈值
-FILE_PATH='./data/E1_kosarak_100k.txt'  # 数据集路径
 
 # --------------- 数据加载 --------------- #
 # 读取数据集，将相同标号的元素放在一个集合中
@@ -100,14 +96,14 @@ def naiveMethod(samples,c):
 
 # --------------- minHash 方法 --------------- #
 # 使用 minHash 方法计算相似集合对的数量
-def MinHashMethod(tot,sample,c):
+def MinHashMethod(tot,sample,c,n_samples,n_hash_funcs):
     # 打印 MinHash 方法信息
     print('MinHash Method Running...')
     # 设置时间起点
     time_start=time.time()
     # 调用 MinHash 类的 minhash_work 方法
     mh=MinHash()
-    mh_result=mh.minhash_work(tot,sample,c)
+    mh_result=mh.minhash_work(tot,sample,c,n_samples,n_hash_funcs)
     # 设置时间终点
     time_end=time.time()
     # 打印 minHash 方法信息
@@ -116,20 +112,25 @@ def MinHashMethod(tot,sample,c):
     # 返回相似集合对的数量
     return len(mh_result)
 
+
+
 # --------------- 主函数 --------------- #
-# 1. 加载数据
-# 2. 采样
-# 3. 数据预处理
-# 4. Naive 方法
-# 5. MinHash 方法
-def main():
+if __name__=='__main__':
+    # --------------- 参数设置 --------------- #
+    n_samples=500   # 采样数量
+    c=0.9           # Naive 方法的阈值
+    n_hash_funcs=50 # MinHash 方法的哈希函数数量
+    FILE_PATH='./data/E1_kosarak_100k.txt'  # 数据集路径
+    # --------------- 整体流程 --------------- #
+    # 1. 加载数据
+    # 2. 采样
+    # 3. 数据预处理
+    # 4. Naive 方法
+    # 5. MinHash 方法
     corpus=data(FILE_PATH)
     samples=sample(corpus,n_samples)
     samples,tot=create_data(samples)
     naive_result=naiveMethod(samples,c)
-    mh_result=MinHashMethod(tot,samples,c)
-
-if __name__=='__main__':
-    main()
+    mh_result=MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
 
 
