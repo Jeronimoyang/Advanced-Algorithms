@@ -173,13 +173,15 @@ def main():
     corpus = data(FILE_PATH)
     # 采样
     print('............................................................')
-    samples = sample(corpus, n_samples)
+    #samples = sample(corpus, n_samples)
     # Naive 方法
     print('............................................................')
-    naive_result = naiveMethod(samples, c)
+    #naive_result = naiveMethod(corpus, c)
+    #naive_result = naiveMethod(samples, c)
     # 数据预处理
     print('............................................................')
-    processed, n_elements = preProcess(samples)
+    #processed, n_elements = preProcess(samples)
+    processed, n_elements = preProcess(corpus)
     # MinHash 方法
     print('............................................................')
     minHashMethod(processed, n_elements, b, r)
