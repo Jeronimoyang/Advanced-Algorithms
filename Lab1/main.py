@@ -3,6 +3,10 @@ from naive import Naive
 from minhash import MinHash
 import random
 import time
+import numpy as np
+from draw import draw_time
+from draw import draw_sim
+from draw import jaccard_similarity
 
 # --------------- 数据加载 --------------- #
 # 读取数据集，将相同标号的元素放在一个集合中
@@ -91,8 +95,8 @@ def naiveMethod(samples,c):
     # 打印 Naive 方法信息
     print(f'Naive Method Result:{len(naive_result)}')
     print(f'Time:{time_end-time_start}s')
-    # 返回相似集合对的数量
-    return len(naive_result)
+    # 返回相似集合对的数量, 以及相似集合对
+    return len(naive_result), naive_result
 
 # --------------- minHash 方法 --------------- #
 # 使用 minHash 方法计算相似集合对的数量
@@ -109,9 +113,24 @@ def MinHashMethod(tot,sample,c,n_samples,n_hash_funcs):
     # 打印 minHash 方法信息
     print(f'MinHash Method Result:{len(mh_result)}')
     print(f'Time:{time_end-time_start}s')
-    # 返回相似集合对的数量
-    return len(mh_result)
+    # 返回相似集合对的数量，运行时间，以及相似集合对
+    return len(mh_result), time_end-time_start, mh_result
 
+# --------------- 绘制哈希函数对 MinHash 算法的影响 --------------- #
+def draw_hash(tot,samples,c,n_samples):
+    # 设置哈希函数列表
+    hash_funcs_list = np.linspace(0, 100, num=50, dtype=int)
+    # 创建空列表，用于存储运行时间
+    results_time = []
+    # 创建空列表，用于存储相似度
+    results_sim = []
+    # 试验每个哈希函数的运行时间和相似度
+    for n_hash_funcs in hash_funcs_list:
+        mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
+        results_time.append((n_hash_funcs, time_cost))
+        results_sim.append((n_hash_funcs, jaccard_similarity(set(mh_result), set(naive_result))))
+    draw_time(results_time)
+    draw_sim(results_sim)
 
 
 # --------------- 主函数 --------------- #
@@ -130,7 +149,9 @@ if __name__=='__main__':
     corpus=data(FILE_PATH)
     samples=sample(corpus,n_samples)
     samples,tot=create_data(samples)
-    naive_result=naiveMethod(samples,c)
-    mh_result=MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
+    naive_len, naive_result = naiveMethod(samples,c)
+    mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
+    # --------------- 总结哈希函数对 MinHash 算法的影响 --------------- #
+    draw_hash(tot,samples,c,n_samples)
 
 
