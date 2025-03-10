@@ -129,6 +129,7 @@ def draw_hash(tot,samples,c,n_samples):
         mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
         results_time.append((n_hash_funcs, time_cost))
         results_sim.append((n_hash_funcs, jaccard_similarity(set(mh_result), set(naive_result))))
+        print("------------------------------------------------")
     draw_time(results_time)
     draw_sim(results_sim)
 
@@ -151,6 +152,7 @@ if __name__=='__main__':
     samples,tot=create_data(samples)
     naive_len, naive_result = naiveMethod(samples,c)
     mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
+    print("------------------------------------------------")
     # --------------- 总结哈希函数对 MinHash 算法的影响 --------------- #
     draw_hash(tot,samples,c,n_samples)
 
