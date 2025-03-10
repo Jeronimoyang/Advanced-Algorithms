@@ -3,10 +3,10 @@ from naive import Naive
 from minhash import MinHash
 import random
 import time
-
-n_samples=500
-c=0.9
-FILE_PATH='./data/E1_kosarak_100k.txt'
+# --------------- 参数设置 --------------- #
+n_samples=500   # 采样数量
+c=0.9           # Naive 方法的阈值
+FILE_PATH='./data/E1_kosarak_100k.txt'  # 数据集路径
 
 # --------------- 数据加载 --------------- #
 # 读取数据集，将相同标号的元素放在一个集合中
@@ -27,26 +27,28 @@ def data(file_path):
     # 返回列表 corpus，每个元素是一个集合
     return corpus
 
+# --------------- 采样 --------------- #
+# 从若干个集合中随机采样 n_samples 个集合
 def sample(corpus,n_samples):
+    # 打印采样信息
     print('Random Sampling...')
+    # 设置时间起点
     time_start=time.time()
+    # 使用 random.sample 方法从 corpus 中随机采样 n_samples 个样本
     samples=random.sample(corpus, n_samples)
+    # 设置时间终点
     time_end=time.time()
+    # 打印采样信息
     print(f'Number of Samples:{n_samples}')
     print('Sampling Done!')
     print(f'Time:{time_end-time_start}s')
+    # 返回列表 samples，每个元素是一个集合
     return samples
 
-def naiveMethod(samples,c):
-    print('Naive Method Running...')
-    time_start=time.time()
-    naive=Naive()
-    naive_result=naive.run(samples,c)
-    time_end=time.time()
-    print(f'Naive Method Result:{len(naive_result)}')
-    print(f'Time:{time_end-time_start}s')
-    return len(naive_result)
-
+# --------------- 数据预处理 --------------- #
+# 汇总所有集合的元素种类，生成对应的索引，
+# 再用索引值代替元素，表示集合的特征
+# 最终返回：用索引值表示的集合数据；元素种类的数量
 def create_data(sample):
     print('Discretization Running...')
     # 设置时间起点
@@ -78,23 +80,56 @@ def create_data(sample):
     # 返回用索引表示的集合和元素种类数
     return sample,len(num)
 
+# --------------- navie 方法 --------------- #
+# 使用暴力方法计算相似集合对的数量
+def naiveMethod(samples,c):
+    # 打印 Naive 方法信息
+    print('Naive Method Running...')
+    # 设置时间起点
+    time_start=time.time()
+    # 调用 Naive 类的 run 方法
+    naive=Naive()
+    naive_result=naive.run(samples,c)
+    # 设置时间终点
+    time_end=time.time()
+    # 打印 Naive 方法信息
+    print(f'Naive Method Result:{len(naive_result)}')
+    print(f'Time:{time_end-time_start}s')
+    # 返回相似集合对的数量
+    return len(naive_result)
+
+# --------------- minHash 方法 --------------- #
+# 使用 minHash 方法计算相似集合对的数量
 def MinHashMethod(tot,sample,c):
+    # 打印 MinHash 方法信息
     print('MinHash Method Running...')
     # 设置时间起点
     time_start=time.time()
+    # 调用 MinHash 类的 minhash_work 方法
     mh=MinHash()
     mh_result=mh.minhash_work(tot,sample,c)
     # 设置时间终点
     time_end=time.time()
+    # 打印 minHash 方法信息
     print(f'MinHash Method Result:{len(mh_result)}')
     print(f'Time:{time_end-time_start}s')
+    # 返回相似集合对的数量
     return len(mh_result)
 
-if __name__=='__main__':
+# --------------- 主函数 --------------- #
+# 1. 加载数据
+# 2. 采样
+# 3. 数据预处理
+# 4. Naive 方法
+# 5. MinHash 方法
+def main():
     corpus=data(FILE_PATH)
     samples=sample(corpus,n_samples)
     samples,tot=create_data(samples)
     naive_result=naiveMethod(samples,c)
     mh_result=MinHashMethod(tot,samples,c)
+
+if __name__=='__main__':
+    main()
 
 
