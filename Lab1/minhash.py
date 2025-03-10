@@ -1,12 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+# 使用 minhash 算法计算集合之间的相似度
 class MinHash:
-    # 初始化函数
+    # --------------- 初始化方法，不做任何事情 --------------- #
     def __init__(self):
         pass
     
+    # --------------- 静态方法，不依赖于类的实例 self --------------- #
     @staticmethod
+    # 计算相似集合对
     def minhash_work(n_element,sample,c):
         # 创建一个空列表，用于存储相似集合对
         R=set()
