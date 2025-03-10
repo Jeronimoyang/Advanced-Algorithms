@@ -8,14 +8,23 @@ n_samples=500
 c=0.9
 FILE_PATH='./data/E1_kosarak_100k.txt'
 
+# --------------- 数据加载 --------------- #
+# 读取数据集，将相同标号的元素放在一个集合中
+# 最终将整个数据集，用若干个集合表示
 def data(file_path):
+    # 打印数据加载信息
     print('Data Loading...')
+    # 设置时间起点
     time_start=time.time()
+    # 调用 DataLoader 类的 load 方法加载数据
     corpus=DataLoader(file_path).load()
+    # 设置时间终点
     time_end=time.time()
+    # 打印数据加载信息
     print('Data Loaded!')
     print(f'Number of Set:{len(corpus)}')
     print(f'Time:{time_end-time_start}s')
+    # 返回列表 corpus，每个元素是一个集合
     return corpus
 
 def sample(corpus,n_samples):
