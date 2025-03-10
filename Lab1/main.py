@@ -7,12 +7,12 @@ import time
 
 # --------------- 参数设置 --------------- #
 n_samples = 500 # 采样数
-b = 5           # MinHash 方法的 band 数量
-r = 4           # MinHash 方法的 row 数量
+b = 10           # MinHash 方法的 band 数量
+r = 10           # MinHash 方法的 row 数量
 # 记录最优 band 和 row 的参数
 best = {"b": None, "r": None, "result": None, "value": 100000}
-c = 0.8         # Naive 方法的阈值
-FILE_PATH = './data/E1_AOL-out.txt' # 数据集路径
+c = 0.9         # Naive 方法的阈值
+FILE_PATH = './data/E1_kosarak_100k.txt' # 数据集路径
 
 # --------------- 数据加载 --------------- #
 # 读取数据集，将相同标号的元素放在一个集合中
@@ -182,7 +182,7 @@ def main():
     processed, n_elements = preProcess(samples)
     # MinHash 方法
     print('............................................................')
-    minHashMethod(processed, n_elements, b, r, naive_result)
+    minHashMethod(processed, n_elements, b, r)
 
 if __name__ == '__main__':
     main()
