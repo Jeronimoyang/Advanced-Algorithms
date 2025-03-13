@@ -117,7 +117,7 @@ def MinHashMethod(tot,sample,c,n_samples,n_hash_funcs):
     return len(mh_result), time_end-time_start, mh_result
 
 # --------------- 绘制哈希函数对 MinHash 算法的影响 --------------- #
-def draw_hash(tot,samples,c,n_samples):
+def draw_hash(tot,samples,c,n_samples,DATASET):
     # 设置哈希函数列表
     hash_funcs_list = np.linspace(0, 100, num=50, dtype=int)
     # 创建空列表，用于存储运行时间
@@ -130,8 +130,8 @@ def draw_hash(tot,samples,c,n_samples):
         results_time.append((n_hash_funcs, time_cost))
         results_sim.append((n_hash_funcs, jaccard_similarity(set(mh_result), set(naive_result))))
         print("------------------------------------------------")
-    draw_time(results_time)
-    draw_sim(results_sim)
+    draw_time(results_time,DATASET)
+    draw_sim(results_sim,DATASET)
 
 
 # --------------- 主函数 --------------- #
@@ -140,7 +140,8 @@ if __name__=='__main__':
     n_samples=500   # 采样数量
     c=0.9           # Naive 方法的阈值
     n_hash_funcs=50 # MinHash 方法的哈希函数数量
-    FILE_PATH='./data/E1_kosarak_100k.txt'  # 数据集路径
+    DATASET = 'E1_Booking-out'  # 数据集名称
+    FILE_PATH=f"./data/{DATASET}.txt"  # 数据集路径
     # --------------- 整体流程 --------------- #
     # 1. 加载数据
     # 2. 采样
@@ -148,12 +149,16 @@ if __name__=='__main__':
     # 4. Naive 方法
     # 5. MinHash 方法
     corpus=data(FILE_PATH)
+    print("------------------------------------------------")
     samples=sample(corpus,n_samples)
+    print("------------------------------------------------")
     samples,tot=create_data(samples)
+    print("------------------------------------------------")
     naive_len, naive_result = naiveMethod(samples,c)
+    print("------------------------------------------------")
     mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
     print("------------------------------------------------")
     # --------------- 总结哈希函数对 MinHash 算法的影响 --------------- #
-    draw_hash(tot,samples,c,n_samples)
+    draw_hash(tot,samples,c,n_samples,DATASET)
 
 
