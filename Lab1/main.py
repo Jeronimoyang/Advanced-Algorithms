@@ -137,7 +137,7 @@ def draw_hash(tot,samples,c,n_samples,DATASET):
 # --------------- 主函数 --------------- #
 if __name__=='__main__':
     # --------------- 参数设置 --------------- #
-    n_samples=500   # 采样数量
+    n_samples=5000   # 采样数量
     c=0.9           # Naive 方法的阈值
     n_hash_funcs=50 # MinHash 方法的哈希函数数量
     DATASET = 'E1_kosarak_100k'  # 数据集名称
@@ -159,6 +159,6 @@ if __name__=='__main__':
     mh_len, time_cost, mh_result = MinHashMethod(tot,samples,c,n_samples,n_hash_funcs)
     print("------------------------------------------------")
     # --------------- 总结哈希函数对 MinHash 算法的影响 --------------- #
-    draw_hash(tot,samples,c,n_samples,DATASET)
+    #draw_hash(tot,samples,c,n_samples,DATASET)
 
 
