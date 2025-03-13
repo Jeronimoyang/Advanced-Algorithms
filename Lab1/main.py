@@ -140,7 +140,7 @@ if __name__=='__main__':
     n_samples=500   # 采样数量
     c=0.9           # Naive 方法的阈值
     n_hash_funcs=50 # MinHash 方法的哈希函数数量
-    DATASET = 'E1_Booking-out'  # 数据集名称
+    DATASET = 'E1_kosarak_100k'  # 数据集名称
     FILE_PATH=f"./data/{DATASET}.txt"  # 数据集路径
     # --------------- 整体流程 --------------- #
     # 1. 加载数据

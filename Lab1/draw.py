@@ -23,7 +23,7 @@ def draw_time(results_time,DATASET):
 def draw_sim(results_sim,DATASET):
     hash_funcs_list, sims = zip(*results_sim)
     plt.figure(figsize=(10, 6))
-    plt.plot(hash_funcs_list, sims, marker='o', linestyle='-', color='b', label="MinHash Running Time")
+    plt.plot(hash_funcs_list, sims, marker='o', linestyle='-', color='b', label="Jaccard Similarity")
     plt.xlabel('Number of Hash Functions')   # X轴标签
     plt.ylabel('Jaccard Similarity of MinHash and Naive')     # Y轴标签
     plt.title('Jaccard Similarity of MinHash and Naive vs. Number of Hash Functions')  # 图像标题
