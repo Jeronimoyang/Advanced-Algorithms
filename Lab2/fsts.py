@@ -1,7 +1,7 @@
 from sort import MergeSort
 
 
-class Naive:
+class Fsts:
     def __init__(self, corpus, k):
         self.corpus = corpus
         self.k = k

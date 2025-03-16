@@ -1,5 +1,5 @@
 from createData import DataGenerator
-from naive import Naive
+from fsts import Fsts
 from linear import Linear
 from lazySelect import LazySelect
 import numpy as np
@@ -34,21 +34,22 @@ def data(n_samples):
     # 返回生成的数据集
     return corpus
 
+# fisrt sort then select
 # --------------- 先排序后直接抽取选择算法 --------------- #
-def naiveMethod(corpus, k):
+def fstsMethod(corpus, k):
     # 记录开始时间
     time_start = tm.time()
-    # 使用 Naive 类初始化朴素选择算法
-    naive = Naive(corpus, k)
-    # 运行朴素选择算法，传入表示数据的三种类型
-    result = naive.run(["uniform", "normal", "zipf"])
+    # 使用 Fsts 类初始化先排序后直接抽取选择算法
+    fsts = Fsts(corpus, k)
+    # 运行先排序后直接抽取选择算法，传入表示数据的三种类型
+    result = fsts.run(["uniform", "normal", "zipf"])
     # 记录结束时间
     time_end = tm.time()
-    # 打印朴素选择算法结果
-    print('===========Naive Method Result===========')
+    # 打印先排序后直接抽取选择算法结果
+    print('===========Fsts Method Result===========')
     printDict(result)
     print(f'Time: {time_end - time_start}s')
-    # 返回朴素选择算法结果和运行时间
+    # 返回先排序后直接抽取选择算法结果和运行时间
     return result, time_end - time_start
 
 # --------------- 线性时间中位数选取算法 --------------- #
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     # 生成数据集
     corpus = data(N_SAMPLES)
     # 初始化算法运行时间列表
-    naiveTime = []
+    fstsTime = []
     linearTime = []
     lazyTime = []
     # 初始化错误计数
@@ -100,9 +101,9 @@ if __name__ == "__main__":
         # 打印当前循环次数
         print(f'=============Epoch {_+1}=============')
         # 运行先排序后直接抽取选择算法，返回结果和运行时间
-        correct, time = naiveMethod(corpus, K)
+        correct, time = fstsMethod(corpus, K)
         # 将运行时间添加到先排序后直接抽取选择算法运行时间列表中
-        naiveTime.append(time)
+        fstsTime.append(time)
         # 运行线性时间中位数选取算法，返回运行时间
         linearTime.append(linearMethod(corpus, K))
         # 运行 lazySelect 随机算法，返回结果和运行时间
@@ -115,7 +116,7 @@ if __name__ == "__main__":
                  + int(correct["zipf"] != result["zipf"])
     # 打印总结
     print('=============Conclusion=============')
-    print(f"Naive: {np.mean(naiveTime)}")
+    print(f"Fsts: {np.mean(fstsTime)}")
     print(f"Linear: {np.mean(linearTime)}")
     print(f"Lazy: {np.mean(lazyTime)}")
     print(f"Accuracy: {1. - error/30.}")
