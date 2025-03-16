@@ -1,10 +1,9 @@
-
 from createData import DataGenerator
 from naive import Naive
 from linear import Linear
 from lazySelect import LazySelect
 import numpy as np
-import time
+import time as tm
 
 N_SAMPLES = 1000
 K = 500
@@ -17,9 +16,9 @@ def printDict(dic):
 
 def data(n_samples):
     print('Data Loading...')
-    time_start = time.time()
+    time_start = tm.time()
     corpus = DataGenerator(n_samples).load()
-    time_end = time.time()
+    time_end = tm.time()
     print('Data Loaded!')
     print(f'Number of Samples: {len(corpus)}')
     print(f'Time: {time_end - time_start}s')
@@ -27,10 +26,10 @@ def data(n_samples):
 
 
 def naiveMethod(corpus, k):
-    time_start = time.time()
+    time_start = tm.time()
     naive = Naive(corpus, k)
     result = naive.run(["uniform", "normal", "zipf"])
-    time_end = time.time()
+    time_end = tm.time()
     print('===========Naive Method Result===========')
     printDict(result)
     print(f'Time: {time_end - time_start}s')
@@ -38,10 +37,10 @@ def naiveMethod(corpus, k):
 
 
 def linearMethod(corpus, k):
-    time_start = time.time()
+    time_start = tm.time()
     linear = Linear(corpus, k)
     result = linear.run(["uniform", "normal", "zipf"])
-    time_end = time.time()
+    time_end = tm.time()
     print('===========Linear Method Result===========')
     printDict(result)
     print(f'Time: {time_end - time_start}s')
@@ -49,17 +48,17 @@ def linearMethod(corpus, k):
 
 
 def lazyMethod(corpus, k):
-    time_start = time.time()
+    time_start = tm.time()
     lazy = LazySelect(corpus, k)
     result = lazy.run(["uniform", "normal", "zipf"])
-    time_end = time.time()
+    time_end = tm.time()
     print('===========Lazy Method Result===========')
     printDict(result)
     print(f'Time: {time_end - time_start}s')
     return result, time_end - time_start
 
 
-def main():
+if __name__ == "__main__":
     corpus = data(N_SAMPLES)
     naiveTime = []
     linearTime = []
@@ -80,7 +79,3 @@ def main():
     print(f"Linear: {np.mean(linearTime)}")
     print(f"Lazy: {np.mean(lazyTime)}")
     print(f"Accuracy: {1. - error/30.}")
-
-
-if __name__ == "__main__":
-    main()
