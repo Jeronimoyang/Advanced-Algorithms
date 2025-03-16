@@ -1,24 +1,38 @@
+# 定义 Linear 类，实现线性时间选择算法
 class Linear:
+    # --------------- 构造函数 --------------- #
     def __init__(self, corpus, k):
+        # 初始化数据集和 k 值
         self.corpus = corpus
         self.k = k
 
+    # --------------- 静态方法 --------------- #
     @staticmethod
+    # 交换数组中两个元素的位置
     def swap(a, i, j):
+        # 如果 i 和 j 相等，直接返回
         if i == j:
             return
+        # 否则交换 i 和 j 位置的元素
         temp = a[j]
         a[j] = a[i]
         a[i] = temp
 
+    # --------------- 找到 a[l:r] 子数组的近似中位数 --------------- #
     def findMid(self, a, l, r):
+        # 递归结束条件：如果区间只有一个元素，直接返回该索引
         if l == r:
             return l
+        # 初始化 i 和 n
         i = l
         n = 0
+        # 以步长为 5 遍历数组
         for i in range(l, r-4, 5):
+            # 对每个步长为 5 的子数组进行排序
             a[i: i + 5] = sorted(a[i: i + 5])
+            # 计算当前组的起始位置相对于 l 的偏移量
             n = i - l
+            # 交换当前组的中位数和 a[l+n//5] 位置的元素
             self.swap(a, l + n // 5, i + 2)
         ## 处理剩余元素
         if r - 4 > l:
@@ -66,16 +80,3 @@ class Linear:
             temp = self.corpus[name][:]
             result[name] = self.select(temp, 0, len(temp), self.k)
         return result
-
-        # 测试样例
-        # a = [3, 0, 7, 6, 5, 9, 8, 2, 1, 74, 13, 11, 17, 16, 75, 19, 18, 12, 40, 14, 23, 21,
-        #      27, 26, 25, 69, 28, 22, 20, 24, 53, 31, 37, 36, 35, 39, 38, 32, 50, 54, 43, 41, 47, 46, 45, 49,
-        #      48, 42, 10, 44, 33, 51, 57, 56, 55, 59, 58, 52, 30, 34, 63, 61, 67, 66, 65, 29, 68, 62, 60, 64,
-        #      73, 71, 77, 76, 15, 79, 78, 72, 70, 4]
-        # result = self.select(a, 0, 80, 13)
-        # print(result)
-
-
-# 测试用, Linear()中参数为任意值
-# linear = Linear(1, 2)
-# linear.run()
