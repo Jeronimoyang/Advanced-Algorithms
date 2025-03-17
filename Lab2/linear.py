@@ -69,15 +69,14 @@ class Linear:
             # 如果 a[j] 大于等于 pivot，j 减 1，即向左移动
             while a[j] >= pivot and i < j:
                 j -= 1
-            # 将 a[j] 放到 a[i] 的位置
-            a[i] = a[j]
             # 如果 a[i] 小于等于 pivot，i 加 1，即向右移动
             while a[i] <= pivot and i < j:
                 i += 1
-            # 将 a[i] 放到 a[j] 的位置
-            a[j] = a[i]
-        # 将 pivot 放到 a[i] 的位置
-        a[i] = pivot
+            if i < j:
+                # 交换 a[i] 和 a[j] 位置的元素
+                self.swap(a, i, j)
+        # 交换 a[l] 和 a[i] 位置的元素
+        self.swap(a, l, i)
         # 返回 i，即 pivot 的位置索引
         return i
 
