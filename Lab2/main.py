@@ -4,8 +4,7 @@ from linear import Linear
 from lazySelect import LazySelect
 import numpy as np
 import time as tm
-from draw import draw_time
-from draw import draw_accuracy
+from draw import draw_k_time, draw_k_accuracy, draw_theta_time, draw_theta_accuracy
 
 # --------------- 打印字典内容 --------------- #
 # 作用：格式化并输出字典的内容
@@ -69,11 +68,11 @@ def linearMethod(corpus, k):
     return time_end - time_start
 
 # --------------- lazySelect 随机算法 --------------- #
-def lazyMethod(corpus, k):
+def lazyMethod(corpus, k, theta):
     # 记录开始时间
     time_start = tm.time()
     # 使用 LazySelect 类初始化 lazySelect 随机算法
-    lazy = LazySelect(corpus, k)
+    lazy = LazySelect(corpus, k, theta)
     # 运行 lazySelect 随机算法，传入表示数据的三种类型
     result = lazy.run(["uniform", "normal", "zipf"])
     # 记录结束时间
@@ -86,7 +85,7 @@ def lazyMethod(corpus, k):
     return result, time_end - time_start
 
 # --------------- 绘制 k 值对三种算法的影响 --------------- #
-def draw_k(K):
+def draw_k(K, Theta):
     # 设置 K 值列表
     K_list = np.linspace(10, 990, num=99, dtype=int)
     # 创建空列表，用于存储先排序后直接抽取选择算法运行时间
@@ -97,10 +96,10 @@ def draw_k(K):
     Lazy_time = []
     # 创建空列表，用于存储算法准确率
     Accuracy = []
-    # 试验每个哈希函数的运行时间和相似度
+    # 遍历 K 值列表
     for K in K_list:
         # 运行主程序
-        fsts_time, linear_time, lazy_time, accuracy = main(K)
+        fsts_time, linear_time, lazy_time, accuracy = main(K, Theta)
         # 将运行时间添加到先排序后直接抽取选择算法运行时间列表中
         Fsts_time.append((K, fsts_time))
         # 将运行时间添加到线性时间中位数选取算法运行时间列表中
@@ -111,11 +110,33 @@ def draw_k(K):
         Accuracy.append((K, accuracy))
         print("------------------------------------------------")
     # 绘制 k 值对三种算法运行时间的影响
-    draw_time(Fsts_time, Linear_time, Lazy_time) 
+    draw_k_time(Fsts_time, Linear_time, Lazy_time) 
     # 绘制 k 值对算法准确率的影响
-    draw_accuracy(Accuracy)
+    draw_k_accuracy(Accuracy)
 
-def main(K):
+# --------------- 绘制 lazySelect 随机算法中的关键参数关系图 --------------- #
+def draw_theta(K, Theta):
+    # 设置 Theta 值列表
+    Theta_list = np.linspace(0.70, 0.98, num=15, dtype=float)
+    # 创建空列表，用于存储 lazySelect 随机算法运行时间
+    Lazy_time = []
+    # 创建空列表，用于存储算法准确率
+    Accuracy = []
+    # 遍历 Theta 值列表
+    for Theta in Theta_list:
+        # 运行主程序
+        fsts_time, linear_time, lazy_time, accuracy = main(K, Theta)
+        # 将运行时间添加到 lazySelect 随机算法运行时间列表中
+        Lazy_time.append((Theta, lazy_time))
+        # 将准确率添加到准确率列表中
+        Accuracy.append((Theta, accuracy))
+        print("------------------------------------------------")
+    # 绘制 lazySelect 随机算法中的关键参数关系图
+    draw_theta_time(Lazy_time)
+    # 绘制 lazySelect 随机算法中的关键参数关系图
+    draw_theta_accuracy(Accuracy)
+
+def main(K, Theta):
     # 初始化算法运行时间列表
     fstsTime = []
     linearTime = []
@@ -133,7 +154,7 @@ def main(K):
         # 运行线性时间中位数选取算法，返回运行时间
         linearTime.append(linearMethod(corpus, K))
         # 运行 lazySelect 随机算法，返回结果和运行时间
-        result, time = lazyMethod(corpus, K)
+        result, time = lazyMethod(corpus, K, Theta)
         # 将运行时间添加到 lazySelect 随机算法运行时间列表中
         lazyTime.append(time)
         # 计算错误次数
@@ -152,11 +173,12 @@ def main(K):
 if __name__ == "__main__":
     N_SAMPLES = 1000    # 生成数据集的样本数量
     K = 500             # 要在数据集中选择的第k小的元素
+    Theta = 0.75            # lazySelect 随机算法中的关键参数
     # 生成数据集
     corpus = data(N_SAMPLES)
     # 运行主程序
-    #main(K)
+    main(K, Theta)
     # --------------- 总结 k 值对算法的影响 --------------- #
-    draw_k(K)
+    draw_k(K, Theta)
     # --------------- 总结 lazySelect 随机算法中的关键参数对算法的影响 --------------- #
-    #draw_n(tot,samples,c,n_samples,DATASET)
+    draw_theta(K, Theta)

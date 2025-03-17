@@ -5,16 +5,11 @@ import math
 # 定义 LazySelect 类，实现懒惰选择算法，用于在数据集中选择第 k 小的元素
 class LazySelect:
     # --------------- 构造函数 --------------- #
-    def __init__(self, corpus, k):
-        # 初始化数据集和 k 值
+    def __init__(self, corpus, k, theta):
+        # 初始化数据集和 k 值和 theta 值
         self.corpus = corpus
         self.k = k
-
-    # --------------- 静态函数 --------------- #
-    @staticmethod
-    # 从数据集中随机选择 n^0.75 个元素
-    def randomSelect(data):
-        return np.random.choice(data, int(pow(len(data), 0.75)), replace=True).tolist()
+        self.theta = theta
 
     # --------------- 构造函数 --------------- #
     @staticmethod
@@ -32,6 +27,11 @@ class LazySelect:
                 count += 1
         # 返回排名
         return count + 1
+    
+    # --------------- 随机选择函数 --------------- #
+    # 从数据集中随机选择 n^0.75 个元素
+    def randomSelect(self, data):
+        return np.random.choice(data, int(pow(len(data), self.theta)), replace=True).tolist()
 
     # --------------- 构造函数 --------------- #
     def run(self, name_list):
@@ -57,10 +57,10 @@ class LazySelect:
                 samples = merge.run(samples)
 
                 # 计算 x 的值，大致估计第 k 小的元素的位置
-                x = int(self.k * pow(n, -0.25))
+                x = int(self.k * pow(n, self.theta - 1))
                 # 计算 l 和 r 的值，确保在数据集范围内
                 l = max(0, int(x - math.sqrt(n)))
-                r = min(int(pow(n, 0.75)), int(x + math.sqrt(n)))
+                r = min(int(pow(n, self.theta)), int(x + math.sqrt(n)))
                 # 计算筛选区间的下界
                 L = samples[max(1, l - 1)]
                 # 计算筛选区间的上界
@@ -80,7 +80,7 @@ class LazySelect:
                 # 如果满足以下条件，结束迭代
                 # 1. 第 k 小元素在筛选区间内
                 # 2. 筛选后的 p 足够小，即长度小于等于 4 * n^0.75 + 1
-                if LP <= self.k <= HP and len(p) <= 4 * pow(n, 0.75) + 1:
+                if LP <= self.k <= HP and len(p) <= 4 * pow(n, self.theta) + 1:
                     # 对 p 进行归并排序
                     p = merge.run(p)
                     # 将第 k 小的元素存入 result 字典，计算相对排名
