@@ -4,9 +4,8 @@ from linear import Linear
 from lazySelect import LazySelect
 import numpy as np
 import time as tm
-
-N_SAMPLES = 1000    # 生成数据集的样本数量
-K = 500             # 要在数据集中选择的第k小的元素
+from draw import draw_time
+from draw import draw_accuracy
 
 # --------------- 打印字典内容 --------------- #
 # 作用：格式化并输出字典的内容
@@ -86,10 +85,37 @@ def lazyMethod(corpus, k):
     # 返回 lazySelect 随机算法结果和运行时间
     return result, time_end - time_start
 
-# --------------- 主程序 --------------- #
-if __name__ == "__main__":
-    # 生成数据集
-    corpus = data(N_SAMPLES)
+# --------------- 绘制 k 值对三种算法的影响 --------------- #
+def draw_k(K):
+    # 设置 K 值列表
+    K_list = np.linspace(10, 990, num=99, dtype=int)
+    # 创建空列表，用于存储先排序后直接抽取选择算法运行时间
+    Fsts_time = []
+    # 创建空列表，用于存储线性时间中位数选取算法运行时间
+    Linear_time = []
+    # 创建空列表，用于存储 lazySelect 随机算法运行时间
+    Lazy_time = []
+    # 创建空列表，用于存储算法准确率
+    Accuracy = []
+    # 试验每个哈希函数的运行时间和相似度
+    for K in K_list:
+        # 运行主程序
+        fsts_time, linear_time, lazy_time, accuracy = main(K)
+        # 将运行时间添加到先排序后直接抽取选择算法运行时间列表中
+        Fsts_time.append((K, fsts_time))
+        # 将运行时间添加到线性时间中位数选取算法运行时间列表中
+        Linear_time.append((K, linear_time))
+        # 将运行时间添加到 lazySelect 随机算法运行时间列表中
+        Lazy_time.append((K, lazy_time))
+        # 将准确率添加到准确率列表中
+        Accuracy.append((K, accuracy))
+        print("------------------------------------------------")
+    # 绘制 k 值对三种算法运行时间的影响
+    draw_time(Fsts_time, Linear_time, Lazy_time) 
+    # 绘制 k 值对算法准确率的影响
+    draw_accuracy(Accuracy)
+
+def main(K):
     # 初始化算法运行时间列表
     fstsTime = []
     linearTime = []
@@ -120,3 +146,17 @@ if __name__ == "__main__":
     print(f"Linear: {np.mean(linearTime)}")
     print(f"Lazy: {np.mean(lazyTime)}")
     print(f"Accuracy: {1. - error/30.}")
+    return np.mean(fstsTime), np.mean(linearTime), np.mean(lazyTime), 1. - error/30.
+
+# --------------- 主框架 --------------- #
+if __name__ == "__main__":
+    N_SAMPLES = 1000    # 生成数据集的样本数量
+    K = 500             # 要在数据集中选择的第k小的元素
+    # 生成数据集
+    corpus = data(N_SAMPLES)
+    # 运行主程序
+    #main(K)
+    # --------------- 总结 k 值对算法的影响 --------------- #
+    draw_k(K)
+    # --------------- 总结 lazySelect 随机算法中的关键参数对算法的影响 --------------- #
+    #draw_n(tot,samples,c,n_samples,DATASET)
