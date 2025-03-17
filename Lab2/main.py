@@ -41,6 +41,9 @@ def fstsMethod(corpus, k):
     fsts = Fsts(corpus, k)
     # 运行先排序后直接抽取选择算法，传入表示数据的三种类型
     result = fsts.run(["uniform", "normal", "zipf"])
+    #result = fsts.run(["uniform"])
+    #result = fsts.run(["normal"])
+    #result = fsts.run(["zipf"])
     # 记录结束时间
     time_end = tm.time()
     # 打印先排序后直接抽取选择算法结果
@@ -58,6 +61,9 @@ def linearMethod(corpus, k):
     linear = Linear(corpus, k)
     # 运行线性时间中位数选取算法，传入表示数据的三种类型
     result = linear.run(["uniform", "normal", "zipf"])
+    #result = linear.run(["uniform"])
+    #result = linear.run(["normal"])
+    #result = linear.run(["zipf"])
     # 记录结束时间
     time_end = tm.time()
     # 打印线性时间中位数选取算法结果
@@ -75,6 +81,9 @@ def lazyMethod(corpus, k, theta):
     lazy = LazySelect(corpus, k, theta)
     # 运行 lazySelect 随机算法，传入表示数据的三种类型
     result = lazy.run(["uniform", "normal", "zipf"])
+    #result = lazy.run(["uniform"])
+    #result = lazy.run(["normal"])
+    #result = lazy.run(["zipf"])
     # 记录结束时间
     time_end = tm.time()
     # 打印 lazySelect 随机算法结果
@@ -161,6 +170,7 @@ def main(K, Theta):
         error += int(correct["uniform"] != result["uniform"]) \
                  + int(correct["normal"] != result["normal"]) \
                  + int(correct["zipf"] != result["zipf"])
+        #error += int(correct["zipf"] != result["zipf"])
     # 打印总结
     print('=============Conclusion=============')
     print(f"Fsts: {np.mean(fstsTime)}")
