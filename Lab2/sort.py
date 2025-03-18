@@ -13,7 +13,7 @@ class MergeSort:
         l, r = 0, 0
         # 初始化新列表，用于存储合并后的有序数组
         new_list = []
-        # 循环遍历左右两个有序数组，知道其中一个数组处理完毕
+        # 循环遍历左右两个有序数组，直到其中一个数组处理完毕
         while l < len(list_left) and r < len(list_right):
             # 比较左右两个数组的当前元素，将较小的元素添加到新列表中
             if list_left[l] <= list_right[r]:

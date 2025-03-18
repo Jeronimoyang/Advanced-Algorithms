@@ -17,7 +17,7 @@ class Fsts:
         merge = MergeSort()
         # 遍历数据类型集
         for name in name_list:
-            # 对每类数据进行归并排序，的带一个升序排列的列表
+            # 对每类数据进行归并排序，得到一个升序排列的列表
             temp = merge.run(self.corpus[name])
             # 找到排序后的第 k 小值，并存入 result 字典
             result[name] = temp[self.k-1]
