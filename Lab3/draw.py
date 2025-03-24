@@ -4,7 +4,7 @@ from mpmath import zeta
 # --------------- 绘制 Prim 算法的运行时间随图规模变化的曲线 --------------- #
 def draw_time(runtimes):
     n_list, runtimes = zip(*runtimes)
-    plt.figiure(figsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     plt.plot(n_list, runtimes, marker='o', linestyle='-', color='b', label="runtime")
     plt.xlabel('N-value')   
     plt.ylabel('Running Time (seconds)')

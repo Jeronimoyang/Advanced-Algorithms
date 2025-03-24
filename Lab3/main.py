@@ -13,6 +13,7 @@ def main():
     mst_weights = []
     # 遍历 n_list 数组，即对不同的图规模 n 进行测试
     for n in n_list:
+        print(f"---------- The graph scale is {n} vertices ----------")
         # 创建 RandomGraph 类的实例，表示一个 n 顶点的随机图
         graph = RandomGraph(n)
         # 初始化 mst_weight 为 0
@@ -20,7 +21,8 @@ def main():
         # 计算 Prim 算法的起始时间
         start_time = time.time()
         # 进行 iter_num 次 Prim 算法的运行
-        for _ in range(iter_num):
+        for num in range(iter_num):
+            #print(f"{num}th calculation")
             # 随机化 graph，生成一个 n 顶点的随机加权图
             graph.randomize()
             # 运行 Prim 算法，计算最小生成树的权值
@@ -30,6 +32,9 @@ def main():
         # 计算 Prim 算法的平均运行时间和 MST 权值
         runtimes.append((n, ((end_time - start_time)/iter_num)))
         mst_weights.append((n, (mst_weight/iter_num)))
+        print(f"Average runtime: {(end_time - start_time)/iter_num} seconds")
+        print(f"Average mst_weight: {mst_weight/iter_num}")
+    print("---------- Plotting data images ----------")
     # 绘制 Prim 算法的运行时间随图规模变化的曲线
     draw_time(runtimes)
     # 绘制 MST 权值随图规模变化的曲线
