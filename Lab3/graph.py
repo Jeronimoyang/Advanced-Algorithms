@@ -52,3 +52,67 @@ class RandomGraph:
                     dist[v] = self.graph[u, v]
         # 返回 MST 的总权值
         return mst
+    
+    # --------------- kruskal 方法 --------------- #
+    # Kruskal 算法计算最小生成树权值
+    def kruskal(self):
+        # 初始化 n
+        n = self.n
+        # 初始化 edges 数组，存储图中所有边的信息
+        edges = []
+        # 遍历邻接矩阵，将边的信息加入 edges 数组
+        for i in range(n):
+            for j in range(i+1, n):
+                if self.graph[i, j] != np.inf:
+                    edges.append((i, j, self.graph[i, j]))
+        # 按照边的权值从小到大排序
+        edges.sort(key=lambda x: x[2])
+        # 初始化 parent 数组，存储顶点的父节点
+        parent = list(range(n))
+        # 记录树的深度
+        rank = [0] * n
+        # --------------- 查找操作 --------------- #
+        # 用于查找顶点 x 所属的连通分量的根节点
+        def find(x):
+            # 如果 x 不是根节点，则递归查找其根节点
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            # 返回 x 的根节点
+            return parent[x]
+        
+        # --------------- 合并操作 --------------- #
+        def union(x, y):
+            # 查找 x 和 y 的根节点
+            root_x = find(x)
+            root_y = find(y)
+            # 如果 x 和 y 不在同一个连通分量中，则合并
+            if root_x != root_y:
+                # 如果 x 的树深度小于 y 的树深度，则将 x 的根节点设为 y
+                if rank[root_x] > rank[root_y]:
+                    parent[root_y] = root_x
+                # 如果 x 的树深度大于 y 的树深度，则将 y 的根节点设为 x
+                elif rank[root_x] < rank[root_y]:
+                    parent[root_x] = root_y
+                # 如果 x 和 y 的树深度相等，则将其中一个设为另一个的根节点，并更新树深
+                else:
+                    parent[root_y] = root_x
+                    rank[root_x] += 1
+                # 返回 True 表示合并成功
+                return True
+            # 返回 False 表示 x 和 y 已在同一个连通分量中
+            return False
+        # kruskal 算法计算最小生成树的总权值
+        # 初始化 mst 为 0，表示最小生成树的总权值
+        mst = 0
+        # 记录已加入 MST 的边数
+        edge_count = 0
+        # 遍历 edges 数组，即所有边的信息
+        for u, v, w in edges:
+            # 如果 u 和 v 不在同一个连通分量中，则将 u-v 加入 MST
+            if union(u, v):
+                mst += w
+                edge_count += 1
+                if edge_count == n - 1:
+                    break
+        # 返回 MST 的总权值
+        return mst
