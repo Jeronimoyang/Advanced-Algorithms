@@ -3,7 +3,7 @@ import time
 from exact_weight import ExactWeightSampling
 from extended_olken import ExtendedSampling
 from online_exploration import OnlineExplorationSampling
-import matplotlib.pyplot as plt
+from draw import draw_time_cost
 
 
 def do_exact_weight_sampling(sample_nums, db_file, popular_user_file, twitter_user_file):
@@ -66,19 +66,6 @@ def do_online_exploration_sampling(sample_nums, db_file, popular_freq_file, twit
         time_costs[i] += build_weight_cost
     return time_costs
 
-
-def draw_time_cost(sample_nums, all_time_costs):
-    fig = plt.figure(dpi=400)
-    ax = fig.add_subplot(111)
-    ax.plot(sample_nums, all_time_costs[0], label="Exact Weight Sampling", c='g', marker='s')
-    ax.plot(sample_nums, all_time_costs[1], label="Extended Olken Sampling", c='b', marker='o')
-    ax.plot(sample_nums, all_time_costs[2], label="Online Exploration Sampling", c='r', marker='x')
-    ax.set_xlabel("Sample Num")
-    ax.set_ylabel("Time Cost (s)")
-    ax.legend()
-    plt.show()
-
-
 def main():
     db_file = "data/twitter_combined.db"
     popular_freq_file = "data/popular_frequency.txt"
@@ -87,8 +74,16 @@ def main():
     ew_time_costs = do_exact_weight_sampling(sample_nums, db_file, popular_freq_file, twitter_freq_file)
     eo_time_costs = do_extended_olken_sampling(sample_nums, db_file, popular_freq_file, twitter_freq_file)
     oe_time_costs = do_online_exploration_sampling(sample_nums, db_file, popular_freq_file, twitter_freq_file)
-    all_time_costs = [ew_time_costs, eo_time_costs, oe_time_costs]
-    draw_time_cost(sample_nums, all_time_costs)
+    ew_time = []
+    eo_time = []
+    oe_time = []
+    for sample_num, ew_time_cost in zip(sample_nums, ew_time_costs):
+        ew_time.append((sample_num, ew_time_cost))
+    for sample_num, eo_time_cost in zip(sample_nums, eo_time_costs):
+        eo_time.append((sample_num, eo_time_cost))
+    for sample_num, oe_time_cost in zip(sample_nums, oe_time_costs):
+        oe_time.append((sample_num, oe_time_cost))
+    draw_time_cost(ew_time, eo_time, oe_time)
 
 
 if __name__ == "__main__":

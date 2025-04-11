@@ -2,13 +2,12 @@ import sqlite3
 import numpy as np
 import os
 
-
 class Sampling:
     def __init__(self, db_file, popular_user_file, twitter_user_file):
-        self.t0 = (-1, -1)  # 起始虚拟元组
+        self.t0 = (-1, -1)  
         self.conn = sqlite3.connect(db_file)
         self.W = None
-
+    
     def chain_join_sample(self, relations, W):
         t = self.t0
         S = {self.t0}
